@@ -66,7 +66,7 @@ mod csv {
         let mut reader = csv::Reader::from_reader(r);
         let mut vec = Vec::new();
         for e in reader.deserialize() {
-            let e = Payload::Object(e?);
+            let e = Payload::Table(e?);
             vec.push(e);
         }
         Ok(Payload::Array(vec))
@@ -78,7 +78,7 @@ mod csv {
             .ok_or_else(|| eyre!("Payload is not an array"))?;
 
         // Get inner objects and their keys
-        let objects: Vec<_> = value.iter().flat_map(Payload::as_object).collect();
+        let objects: Vec<_> = value.iter().flat_map(Payload::as_table).collect();
         let keys: Vec<_> = objects.iter().flat_map(|x| x.keys()).unique().collect();
 
         let mut writer = csv::Writer::from_writer(w);
@@ -91,9 +91,10 @@ mod csv {
                 let value = e.get(key.as_str());
                 let value = if let Some(value) = value {
                     match value {
-                        Payload::Null => Default::default(),
-                        Payload::Bool(x) => x.to_string(),
-                        Payload::Number(x) => x.to_string(),
+                        Payload::Boolean(x) => x.to_string(),
+                        Payload::Float(x) => x.to_string(),
+                        Payload::Datetime(x) => x.to_string(),
+                        Payload::Integer(x) => x.to_string(),
                         Payload::String(x) => x.to_string(),
                         x => Err(eyre!("Cannot serialize as csv: {x:?}"))?,
                     }
