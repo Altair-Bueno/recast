@@ -12,13 +12,12 @@ pub struct Config {
     /// Output format
     #[arg(short, long, default_value_t)]
     pub to: Format,
-
     /// Output file
     ///
     /// If no file is provided, recast will default to STDOUT
     #[arg(short, long)]
     pub out: Option<Utf8PathBuf>,
-    /// File to transform
+    /// Input file
     ///
     /// If no file is provided, recast will default to STDIN
     #[arg(verbatim_doc_comment)]
