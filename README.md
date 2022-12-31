@@ -8,6 +8,7 @@ formats include:
 - Yaml (`text/x-yaml`)
 - [Query strings](https://github.com/ljharb/qs)
 - CSV (`text/csv`)
+- XML (`text/xml`)
 
 ## Installation
 
@@ -29,8 +30,8 @@ Arguments:
   [FILE]  Input from file
 
 Options:
-  -f, --from <FORMAT>  Input format [default: json] [possible values: json, toml, yaml, query, csv]
-  -t, --to <FORMAT>    Output format [default: json] [possible values: json, toml, yaml, query, csv]
+  -f, --from <FORMAT>  Input format [default: json] [possible values: json, toml, yaml, query, csv, xml]
+  -t, --to <FORMAT>    Output format [default: json] [possible values: json, toml, yaml, query, csv, xml]
   -o, --out <FILE>     Output to file
   -h, --help           Print help information (use `--help` for more detail)
   -V, --version        Print version information
