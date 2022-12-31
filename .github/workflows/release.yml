@@ -45,20 +45,25 @@ jobs:
           - target: "x86_64-unknown-linux-gnu"
             os: ubuntu-latest
             binary: recast
+            toolchain: stable
           # Windows
           - target: "aarch64-pc-windows-msvc"
             os: windows-latest
             binary: recast.exe
+            toolchain: stable
           - target: "x86_64-pc-windows-msvc"
             os: windows-latest
             binary: recast.exe
+            toolchain: stable
           # macOS
           - target: "aarch64-apple-darwin"
             os: macos-latest
             binary: recast
+            toolchain: stable
           - target: "x86_64-apple-darwin"
             os: macos-latest
             binary: recast
+            toolchain: stable
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
