@@ -81,6 +81,7 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
           override: true
           components: rustfmt, clippy
+          target: ${{ matrix.target }}
       - name: Compile binaries
         run: cargo build --release --target ${{ matrix.target }}
       - uses: actions/upload-artifact@v2
