@@ -7,17 +7,17 @@ use clap::ValueEnum;
 #[command(name = "recast",author, version, about, long_about = None)]
 pub struct Config {
     /// Input format
-    #[arg(short, long, default_value_t)]
+    #[arg(short, long, default_value_t, value_name = "FORMAT")]
     pub from: Format,
     /// Output format
-    #[arg(short, long, default_value_t)]
+    #[arg(short, long, default_value_t, value_name = "FORMAT")]
     pub to: Format,
-    /// Output file
+    /// Output to file
     ///
     /// If no file is provided, recast will default to STDOUT
-    #[arg(short, long)]
+    #[arg(short, long, value_name = "FILE")]
     pub out: Option<Utf8PathBuf>,
-    /// Input file
+    /// Input from file
     ///
     /// If no file is provided, recast will default to STDIN
     #[arg(verbatim_doc_comment)]

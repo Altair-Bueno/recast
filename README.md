@@ -23,19 +23,20 @@ Transforms one serialization format into another
 Usage: recast [OPTIONS] [FILE]
 
 Arguments:
-  [FILE]  File to transform
+  [FILE]  Input from file
 
 Options:
-  -f, --from <FROM>  Input format [default: json] [possible values: json, toml, yaml, query, csv]
-  -t, --to <TO>      Output format [default: json] [possible values: json, toml, yaml, query, csv]
-  -o, --out <OUT>    Output file
-  -h, --help         Print help information (use `--help` for more detail)
-  -V, --version      Print version information
+  -f, --from <FORMAT>  Input format [default: json] [possible values: json, toml, yaml, query, csv]
+  -t, --to <FORMAT>    Output format [default: json] [possible values: json, toml, yaml, query, csv]
+  -o, --out <FILE>     Output to file
+  -h, --help           Print help information (use `--help` for more detail)
+  -V, --version        Print version information
 ```
 
 ## Examples
 
-Leverage jq's powerful filters on other serialization formats
+Leverage [jq](https://stedolan.github.io/jq/)'s powerful filters on other
+serialization formats
 
 ```sh
 $ recast -f toml Cargo.lock \
