@@ -15,6 +15,9 @@ formats include:
 | --------------- | ---------------------- |
 | Cargo           | `cargo install recast` |
 
+The [releases page](https://github.com/Altair-Bueno/recast/releases) contains
+pre-compiled releases and shell completion files
+
 ## Usage
 
 ```text
@@ -35,8 +38,9 @@ Options:
 
 ## Examples
 
-Leverage [jq](https://stedolan.github.io/jq/)'s powerful filters on other
-serialization formats
+## [jq](https://stedolan.github.io/jq/)
+
+Leverage jq's powerful filters on other serialization formats
 
 ```sh
 $ recast -f toml Cargo.lock \
@@ -48,4 +52,13 @@ addr2line,0.19.0
 adler,1.0.2
 autocfg,1.1.0
 backtrace,0.3.67
+```
+
+## Syntax highlighting
+
+`recast` doesn't provide syntax highlighting, but you can leverage other cli
+tools like [bat](https://github.com/sharkdp/bat) for this purpose
+
+```sh
+recast -f toml Cargo.toml | bat --language json
 ```
