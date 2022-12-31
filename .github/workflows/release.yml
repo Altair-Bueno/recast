@@ -33,10 +33,10 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
           override: true
           components: rustfmt, clippy
-      - name: Publish on crates.io
-        run: cargo publish
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATESIO_REGISTRY_TOKEN }}
+      # - name: Publish on crates.io
+      #   run: cargo publish
+      #   env:
+      #     CARGO_REGISTRY_TOKEN: ${{ secrets.CRATESIO_REGISTRY_TOKEN }}
   compile:
     strategy:
       matrix:
