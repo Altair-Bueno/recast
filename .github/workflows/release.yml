@@ -89,16 +89,15 @@ jobs:
           name: recast-${{ matrix.target }}
           path: |
             target/${{ matrix.target }}/release/${{ matrix.binary }}
-            completitions/*
+            target/completitions/*
       - name: Copy artifact
-        uses: canastro/copy-action@0.0.2
-        with:
-          source: target/${{ matrix.target }}/release/${{ matrix.binary }}
-          target: target/recast-${{ matrix.target }}
+        run:
+          cp target/${{ matrix.target }}/release/${{ matrix.binary }}
+          target/recast-${{ matrix.target }}
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             target/recast-${{ matrix.target }}
-            completitions/*
+            target/completitions/*
