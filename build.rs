@@ -19,7 +19,8 @@ fn gen_completitons() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    gen_completitons()?;
+    let res = gen_completitons();
+    println!("cargo:warning=RECAST_GENCOMPL={res:?}");
 
     Ok(())
 }
