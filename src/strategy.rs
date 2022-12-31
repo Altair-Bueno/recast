@@ -16,6 +16,7 @@ impl Format {
             Self::Json => crate::strategy::json::from_reader(r),
             Self::Query => crate::strategy::query_string::from_reader(r),
             Self::Csv => crate::strategy::csv::from_reader(r),
+            Self::Xml => crate::strategy::xml::from_reader(r),
         }
     }
 
@@ -26,6 +27,7 @@ impl Format {
             Self::Json => crate::strategy::json::to_writer(w, value),
             Self::Query => crate::strategy::query_string::to_writer(w, value),
             Self::Csv => crate::strategy::csv::to_writer(w, value),
+            Self::Xml => crate::strategy::xml::to_writer(w, value),
         }
     }
 }
@@ -50,3 +52,4 @@ macro_rules! gen_strategy {
 
 gen_strategy!(yaml, serde_yaml::from_reader, serde_yaml::to_writer);
 gen_strategy!(json, serde_json::from_reader, serde_json::to_writer_pretty);
+gen_strategy!(xml, serde_xml_rs::from_reader, serde_xml_rs::to_writer);

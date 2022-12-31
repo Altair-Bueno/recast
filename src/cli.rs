@@ -33,4 +33,5 @@ pub enum Format {
     Yaml,
     Query,
     Csv,
+    Xml,
 }
