@@ -33,11 +33,13 @@ toml = "0.5.10"
 clap_complete = "4.0.7"
 itertools = "0.10.5"
 serde-xml-rs = "0.6.0"
+tap = "1.0.1"
 
 
 [dependencies]
 clap = { workspace = true }
 itertools = { workspace = true }
+tap = { workspace = true }
 color-eyre = { workspace = true }
 eyre = { workspace = true }
 enum-display = { workspace = true }

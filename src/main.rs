@@ -20,6 +20,7 @@ use cli::Config;
 use color_eyre::Help;
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Read, Write};
+use tap::prelude::*;
 
 fn run(
     Config {
@@ -30,34 +31,26 @@ fn run(
     }: Config,
 ) -> Result<()> {
     let reader: Box<dyn Read> = if let Some(pathbuf) = file {
-        let file = File::open(&pathbuf).with_note(|| pathbuf)?;
-        Box::new(file) as _
+        File::open(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
     } else {
-        let inlock = std::io::stdin().lock();
-        Box::new(inlock) as _
+        std::io::stdin().lock().pipe(Box::new)
     };
     let reader = BufReader::new(reader);
 
     let writer: Box<dyn Write> = if let Some(pathbuf) = out {
-        let file = File::open(&pathbuf).with_note(|| pathbuf)?;
-        Box::new(file) as _
+        File::open(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
     } else {
-        let outlock = std::io::stdout().lock();
-        Box::new(outlock) as _
+        std::io::stdout().lock().pipe(Box::new)
     };
     let writer = BufWriter::new(writer);
 
-    let payload = from
-        .load(reader)
-        .with_note(|| format!("cannot deserialize as {from}"))?;
-    to.dump(writer, &payload)
-        .with_note(|| format!("cannot serialize as {to}"))?;
-
-    Ok(())
+    from.load(reader)
+        .with_note(|| format!("cannot deserialize as {from}"))?
+        .pipe_ref(|x| to.dump(writer, x))
+        .with_note(|| format!("cannot serialize as {to}"))
 }
 
 fn main() -> Result<()> {
     color_eyre::install()?;
-    let config = Config::parse();
-    run(config)
+    Config::parse().pipe(run)
 }
