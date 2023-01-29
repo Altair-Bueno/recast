@@ -1,4 +1,5 @@
 use super::{Payload, Read, Result, Write};
+use color_eyre::{Help, SectionExt};
 use eyre::eyre;
 use itertools::Itertools;
 
@@ -36,7 +37,7 @@ pub fn to_writer(w: impl Write, value: &Payload) -> Result<()> {
                     Payload::Datetime(x) => x.to_string(),
                     Payload::Integer(x) => x.to_string(),
                     Payload::String(x) => x.to_string(),
-                    x => Err(eyre!("Cannot serialize as csv: {x:?}"))?,
+                    x => Err(eyre!("Cannot serialize payload as csv"))?,
                 }
             } else {
                 String::default()
