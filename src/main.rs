@@ -38,7 +38,7 @@ fn run(
     let reader = BufReader::new(reader);
 
     let writer: Box<dyn Write> = if let Some(pathbuf) = out {
-        File::open(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
+        File::create(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
     } else {
         std::io::stdout().lock().pipe(Box::new)
     };
