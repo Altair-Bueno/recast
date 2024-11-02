@@ -1,2 +1,2 @@
 pub type Result<T> = eyre::Result<T>;
-pub type Payload = toml::Value;
+pub type Payload = serde_yaml::Value;
