@@ -7,9 +7,13 @@ use clap::ValueEnum;
 #[command(name = "recast",author, version, about, long_about = None)]
 pub struct Config {
     /// Input format
+    ///
+    /// If no format is provided, recast will attempt to infer the format from the file extension
     #[arg(short, long, value_name = "FORMAT")]
     pub from: Option<Format>,
     /// Output format
+    ///
+    /// If no format is provided, recast will attempt to infer the format from the file extension
     #[arg(short, long, value_name = "FORMAT")]
     pub to: Option<Format>,
     /// Output to file
