@@ -5,6 +5,7 @@ use std::io::Read;
 use std::io::Write;
 
 mod csv;
+mod msgpack;
 mod query_string;
 mod toml;
 
@@ -17,6 +18,7 @@ impl Format {
             Self::Query => crate::strategy::query_string::from_reader(r),
             Self::Csv => crate::strategy::csv::from_reader(r),
             Self::Xml => crate::strategy::xml::from_reader(r),
+            Self::Msgpack => crate::strategy::msgpack::from_reader(r),
         }
     }
 
@@ -28,6 +30,7 @@ impl Format {
             Self::Query => crate::strategy::query_string::to_writer(w, value),
             Self::Csv => crate::strategy::csv::to_writer(w, value),
             Self::Xml => crate::strategy::xml::to_writer(w, value),
+            Self::Msgpack => crate::strategy::msgpack::to_writer(w, value),
         }
     }
 }

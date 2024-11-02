@@ -7,11 +7,11 @@ use clap::ValueEnum;
 #[command(name = "recast",author, version, about, long_about = None)]
 pub struct Config {
     /// Input format
-    #[arg(short, long, default_value_t, value_name = "FORMAT")]
-    pub from: Format,
+    #[arg(short, long, value_name = "FORMAT")]
+    pub from: Option<Format>,
     /// Output format
-    #[arg(short, long, default_value_t, value_name = "FORMAT")]
-    pub to: Format,
+    #[arg(short, long, value_name = "FORMAT")]
+    pub to: Option<Format>,
     /// Output to file
     ///
     /// If no file is provided, recast will default to STDOUT
@@ -24,14 +24,30 @@ pub struct Config {
     pub file: Option<Utf8PathBuf>,
 }
 
-#[derive(Debug, Clone, Copy, Default, ValueEnum, enum_display::EnumDisplay)]
+#[derive(Debug, Clone, Copy, ValueEnum, enum_display::EnumDisplay)]
 #[enum_display(case = "Kebab")]
 pub enum Format {
-    #[default]
     Json,
     Toml,
     Yaml,
     Query,
     Csv,
     Xml,
+    Msgpack,
+}
+
+impl Format {
+    pub fn from_extension(s: &str) -> Option<Format> {
+        let format = match s {
+            "json" => Self::Json,
+            "toml" => Self::Toml,
+            "yaml" | "yml" => Self::Yaml,
+            "qs" => Self::Query,
+            "csv" => Self::Csv,
+            "xml" => Self::Xml,
+            "msgpack" | "mpk" => Self::Msgpack,
+            _ => return None,
+        };
+        Some(format)
+    }
 }

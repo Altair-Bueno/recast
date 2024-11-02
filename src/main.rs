@@ -16,10 +16,11 @@ mod types;
 
 use crate::types::Result;
 use clap::Parser;
-use cli::Config;
+use cli::{Config, Format};
 use color_eyre::Help;
+use eyre::eyre;
 use std::fs::File;
-use std::io::{BufReader, BufWriter, Read, Write};
+use std::io::{Read, Write};
 use tap::prelude::*;
 
 fn run(
@@ -30,19 +31,59 @@ fn run(
         file,
     }: Config,
 ) -> Result<()> {
-    let reader: Box<dyn Read> = if let Some(pathbuf) = file {
-        File::open(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
-    } else {
-        std::io::stdin().lock().pipe(Box::new)
+    let (from, reader): (_, Box<dyn Read>) = match (from, file) {
+        (None, None) => {
+            return Err(eyre!("Missing input format for stdin")
+                .with_note(|| "try specifying the input format with --from to read from stdin")
+                .with_note(|| "try specifying the input file"))
+        }
+        (None, Some(path)) => {
+            let Some(extension) = path.extension() else {
+                return Err(eyre!(
+                    "input file does not have a file extension to infer format from"
+                )
+                .with_note(|| "try specifying the format with --from"));
+            };
+            let Some(from) = Format::from_extension(extension) else {
+                return Err(eyre!("unknown input file extension: {extension}")
+                    .with_note(|| "try specifying the format with --from"));
+            };
+            let reader = File::open(&path).with_note(|| path)?.pipe(Box::new);
+            (from, reader)
+        }
+        (Some(from), None) => (from, std::io::stdin().lock().pipe(Box::new)),
+        (Some(from), Some(path)) => {
+            let reader = File::open(&path).with_note(|| path)?.pipe(Box::new);
+            (from, reader)
+        }
     };
-    let reader = BufReader::new(reader);
 
-    let writer: Box<dyn Write> = if let Some(pathbuf) = out {
-        File::create(&pathbuf).with_note(|| pathbuf)?.pipe(Box::new)
-    } else {
-        std::io::stdout().lock().pipe(Box::new)
+    let (to, writer): (_, Box<dyn Write>) = match (to, out) {
+        (None, None) => {
+            return Err(eyre!("missing output format for stdout")
+                .with_note(|| "try specifying the output format with --to to write to stdout")
+                .with_note(|| "try specifying the output file with --out"))
+        }
+        (None, Some(path)) => {
+            let Some(extension) = path.extension() else {
+                return Err(
+                    eyre!("output file does not have a file extension to infer format")
+                        .with_note(|| "try specifying the format with --to"),
+                );
+            };
+            let Some(from) = Format::from_extension(extension) else {
+                return Err(eyre!("Unknown output file extension: {extension}"))
+                    .with_note(|| "try specifying the output format with --to");
+            };
+            let reader = File::create(&path).with_note(|| path)?.pipe(Box::new);
+            (from, reader)
+        }
+        (Some(from), None) => (from, std::io::stdout().lock().pipe(Box::new)),
+        (Some(from), Some(path)) => {
+            let reader = File::create(&path).with_note(|| path)?.pipe(Box::new);
+            (from, reader)
+        }
     };
-    let writer = BufWriter::new(writer);
 
     from.load(reader)
         .with_note(|| format!("cannot deserialize as {from}"))?
