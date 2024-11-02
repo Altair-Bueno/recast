@@ -19,8 +19,10 @@ fn gen_completitons() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    println!("cargo::rerun-if-changed=src/cli.rs");
+
     let res = gen_completitons();
-    println!("cargo:warning=RECAST_GENCOMPL={res:?}");
+    println!("cargo::warning=RECAST_GENCOMPL={res:?}");
 
     Ok(())
 }
