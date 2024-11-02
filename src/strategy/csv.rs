@@ -20,7 +20,7 @@ pub fn to_writer(w: impl Write, value: &Payload) -> Result<()> {
     let keys: Vec<_> = objects
         .iter()
         .flat_map(|x| x.keys())
-        .flat_map(Payload::as_str)
+        .filter_map(Payload::as_str)
         .unique()
         .collect();
 

@@ -41,7 +41,7 @@ pub enum Format {
 }
 
 impl Format {
-    pub fn from_extension(s: &str) -> Option<Format> {
+    pub fn from_extension(s: &str) -> Option<Self> {
         let format = match s {
             "json" => Self::Json,
             "toml" => Self::Toml,
